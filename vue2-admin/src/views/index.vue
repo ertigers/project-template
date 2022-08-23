@@ -32,10 +32,4 @@ export default {
   flex-direction: column;
   overflow: auto;
 }
-.wrapper {
-  flex: 1;
-  background: url('~assets/img/prevention/bg.png') center/cover;
-  background-size: 100% 100%;
-  opacity: 1;
-}
 </style>
