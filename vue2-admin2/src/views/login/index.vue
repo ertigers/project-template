@@ -31,7 +31,6 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { login } from '@/api/auth.js'
 
 export default {
   name: 'Login',
@@ -93,15 +92,14 @@ export default {
           this.loading = true
           const query = {
             username: this.loginForm.username,
-            password: this.loginForm.password,
-            code: '',
-            uuid: ''
+            password: this.loginForm.password
           }
-          login(query).then(() => {
+          this.$store.dispatch('user/login', query).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
               this.loading = false
             })
         } else {
