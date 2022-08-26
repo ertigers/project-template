@@ -1,19 +1,13 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">{{ name }}</div>
+    <div class="dashboard-text">name: 角色管理</div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  }
+  name: 'RoleManage'
 }
 </script>
 

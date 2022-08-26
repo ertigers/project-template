@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const prefix = '/qx'
+const prefix = ''
 
 // 登录
 export function login(query) {
@@ -19,11 +19,11 @@ export function getInfo() {
   })
 }
 
-// 退出方法
+// 退出方法-todo
 export function logout() {
   return request({
     url: `${prefix}/logout`,
-    method: 'post'
+    method: 'get'
   })
 }
 

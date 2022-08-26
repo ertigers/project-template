@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const prefix = '/qx'
+const prefix = ''
 
 // 查询角色列表
 export function listRole(query) {

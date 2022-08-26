@@ -17,6 +17,7 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  // 首页
   {
     path: '/',
     component: Layout,
@@ -25,8 +26,21 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: 'dashboard', icon: 'dashboard' }
     }]
+  },
+  // 系统设置
+  {
+    path: '/system-settings',
+    component: Layout,
+    redirect: '/system-settings/user-manage',
+    name: 'SystemSettings',
+    meta: { title: 'systemSettings', icon: 'el-icon-s-help' },
+    children: [
+      { path: 'user-manage', component: () => import('@/views/system-settings/user-manage/index'), name: 'UserManage', meta: { title: 'userManage', icon: 'table' }},
+      { path: 'role-manage', component: () => import('@/views/system-settings/role-manage/index'), name: 'RoleManage', meta: { title: 'roleManage', icon: 'table' }},
+      { path: 'permission-manage', component: () => import('@/views/system-settings/permission-manage/index'), name: 'PermissionManage', meta: { title: 'permissionManage', icon: 'table' }}
+    ]
   },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
@@ -40,7 +54,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
