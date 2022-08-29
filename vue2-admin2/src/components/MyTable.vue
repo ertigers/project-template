@@ -24,6 +24,7 @@ import {
 
 export default { // extParams 额外参数，可用于搜索
   name: 'MyTable',
+  // eslint-disable-next-line vue/require-prop-types,vue/prop-name-casing
   props: ['pagesize', 'url', 'pagesizes', 'layout', 'nopager', 'height', 'ext-params', 'firstPage', 'keepCase'],
   data: function() {
     return {

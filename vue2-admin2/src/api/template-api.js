@@ -2,6 +2,8 @@ import request from '@/utils/request'
 
 const prefix = ''
 
+// 此模板是增删改查的api规范的案例
+
 // 添加用户
 export function addUser(query) {
   return request({

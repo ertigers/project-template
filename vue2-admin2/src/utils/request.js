@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { getLanguage } from '@/lang/index'
 
 // create an axios instance
 const service = axios.create({
@@ -14,6 +15,7 @@ service.interceptors.request.use(
   config => {
     if (store.getters.token) {
       config.headers['Authorization'] = 'Bearer ' + getToken()
+      config.headers['Accept-Language'] = getLanguage()
     }
     return config
   },
