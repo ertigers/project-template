@@ -1,24 +1,23 @@
 <template>
   <div v-loading="loading" class="user-manage-container" element-loading-text="loading···" element-loading-spinner="el-icon-loading">
     <el-row class="tools-wrapper">
-      <el-input v-model="searchQuery.userName" :placeholder="$t('systemSettings.userManage.tools.placeholderName')" style="width: 120px; margin-right: 10px" clearable />
-      <el-button style="margin-left:auto" type="primary" @click="fetchRoleList">{{ $t('systemSettings.userManage.tools.btnSearch') }}</el-button>
-      <el-button size="small" type="primary" @click="addRole">添加角色</el-button>
+      <el-input v-model="searchQuery.userName" :placeholder="$t('systemSettings.roleManage.tools.placeholderName')" style="width: 120px; margin-right: 10px" clearable />
+      <el-button style="margin-left:auto" type="primary" @click="fetchRoleList">{{ $t('global.button.search') }}</el-button>
+      <el-button size="small" type="primary" @click="addRole">{{ $t('global.button.add') }}</el-button>
     </el-row>
     <el-row class="table-wrapper">
       <el-table id="dataList" :data="tableData.rows" style="width: 100%" height="99%" border :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
-        <el-table-column prop="roleName" label="角色名称" min-width="100" />
+        <el-table-column prop="roleName" :label="$t('systemSettings.roleManage.tableData.tableCols.roleName')" min-width="100" />
         <el-table-column prop="roleKey" label="key" min-width="100" />
-        <el-table-column prop="status" label="类型" min-width="100">
+        <el-table-column prop="status" :label="$t('systemSettings.roleManage.tableData.tableCols.type')" min-width="100">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === '0'" type="success"> 系统角色 </el-tag>
-            <el-tag v-else-if="scope.row.status === '1'" type="success"> 自定义角色 </el-tag>
+            <el-tag type="success"> {{ roleTypeMap[scope.row.status] }} </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="描述" min-width="100" />
-        <el-table-column label="操作">
+        <el-table-column prop="remark" :label="$t('systemSettings.roleManage.tableData.tableCols.remark')" min-width="100" />
+        <el-table-column :label="$t('systemSettings.roleManage.tableData.tableCols.operation')">
           <template slot-scope="scope">
-            <el-button type="warning" size="mini" @click="handleEdit(scope.row)">修改</el-button>
+            <el-button type="warning" size="mini" @click="handleEdit(scope.row)">{{ $t('global.button.edit') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -34,8 +33,10 @@
 <script>
 import { getRoleList } from '@/api/role'
 import RoleDialog from './role-dialog.vue'
+import { globalParams } from '@/utils/params'
 
 const defaultFormData = {
+  roleId: '',
   roleName: '',
   roleKey: '',
   status: 1,
@@ -60,7 +61,9 @@ export default {
       tableData: {
         rows: [],
         total: 0
-      }
+      },
+
+      roleTypeMap: globalParams.roleTypeMap
     }
   },
   mounted() {
@@ -75,12 +78,16 @@ export default {
     },
     // 添加角色
     addRole() {
-      this.$refs['roleDialog'].form = defaultFormData
+      this.$refs['roleDialog'].form = JSON.parse(JSON.stringify(defaultFormData))
       this.$refs['roleDialog'].isEdit = false
       this.$refs['roleDialog'].dialog = true
+      this.$nextTick(() => {
+        this.$refs['roleDialog'].$refs['form'].clearValidate()
+      })
     },
     handleEdit(row) {
       this.$refs['roleDialog'].form = Object.assign({}, {
+        roleId: row.roleId,
         roleName: row.roleName,
         roleKey: row.roleKey,
         status: row.status,

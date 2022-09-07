@@ -23,9 +23,8 @@ export function addUser(query) {
 // 删除用户
 export function delRole(query) {
   return request({
-    url: `${prefix}/system/user`,
-    method: 'delete',
-    data: query
+    url: `${prefix}/system/user/` + query,
+    method: 'delete'
   })
 }
 

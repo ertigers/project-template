@@ -2,20 +2,23 @@
   <div v-loading="loading" class="user-manage-container" element-loading-text="loading···" element-loading-spinner="el-icon-loading">
     <el-row class="tools-wrapper">
       <el-input v-model="searchQuery.userName" :placeholder="$t('systemSettings.userManage.tools.placeholderName')" style="width: 120px; margin-right: 10px" clearable />
-      <el-button style="margin-left:auto" type="primary" @click="fetchUserList">{{ $t('systemSettings.userManage.tools.btnSearch') }}</el-button>
-    </el-row>
-    <el-row>
-      <el-button size="small" type="primary" @click="addUser">添加用户</el-button>
+      <el-button style="margin-left:auto" type="primary" @click="fetchUserList">{{ $t('global.button.search') }}</el-button>
+      <el-button v-permission="['system:user:add']" type="primary" @click="addUser">{{ $t('global.button.add') }}</el-button>
     </el-row>
     <el-row class="table-wrapper">
       <el-table id="dataList" :data="tableData.rows" style="width: 100%" height="99%" border :header-cell-style="{ textAlign: 'center' }" :cell-style="{ textAlign: 'center' }">
         <el-table-column prop="userName" :label="$t('systemSettings.userManage.tableData.tableCols.name')" min-width="100" />
-        <el-table-column prop="status" :label="$t('systemSettings.userManage.tableData.tableCols.status')" min-width="100" />
+        <el-table-column prop="status" :label="$t('systemSettings.userManage.tableData.tableCols.status')" min-width="100">
+          <template slot-scope="scope">
+            <el-tag type="success"> {{ userTypeMap[scope.row.status] }} </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="remark" :label="$t('systemSettings.userManage.tableData.tableCols.remark')" min-width="100" />
         <el-table-column prop="createTime" :label="$t('systemSettings.userManage.tableData.tableCols.createTime')" min-width="100" />
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="warning" size="mini" @click="handleEdit(scope.row)">修改</el-button>
+            <el-button type="warning" size="mini" @click="handleEdit(scope.row)">{{ $t('global.button.edit') }}</el-button>
+            <el-button type="danger" size="mini" @click="handleDelete(scope.row)">{{ $t('global.button.del') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -33,40 +36,24 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog title="表单" center :visible.sync="addDialog" :before-close="outClose">
-      <el-form ref="form" :model="addForm" label-width="80px">
-        <el-form-item label="userName">
-          <el-input v-model="addForm.userName" />
-        </el-form-item>
-        <el-form-item label="password">
-          <el-input v-model="addForm.password" />
-        </el-form-item>
-        <el-form-item>
-          <el-select v-model="addForm.roleId" placeholder="请选择">
-            <el-option
-              v-for="item in roleSelect"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
-          <el-button @click="addDialog=false">返回</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+    <user-dialog ref="userDialog" />
   </div>
 </template>
 
 <script>
-import { getUserList, addUser } from '@/api/user'
+import { delRole, getUserList } from '@/api/user'
 import { getRoleList } from '@/api/role'
+import userDialog from './user-dialog'
+import { globalParams } from '@/utils/params'
 
+const defaultFormData = {
+  userName: '',
+  password: '',
+  roleId: ''
+}
 export default {
   name: 'UserManage',
-  components: {},
+  components: { 'user-dialog': userDialog },
   data() {
     return {
       loading: false,
@@ -75,19 +62,18 @@ export default {
       },
       pageQuery: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderValue: 'id',
+        orderWay: 'desc'
       },
       tableData: {
         rows: [],
         total: 0
       },
       addDialog: false,
-      addForm: {
-        userName: '',
-        password: '',
-        roleId: ''
-      },
-      roleSelect: []
+      roleSelect: [],
+
+      userTypeMap: globalParams.userTypeMap
     }
   },
   mounted() {
@@ -115,27 +101,47 @@ export default {
     },
     // 添加用户
     addUser() {
-      this.addDialog = true
-    },
-    onSubmit() {
-      addUser(this.addForm).then((res) => {
-        console.log(res.data)
-      })
-    },
-    outClose(done) {
-      this.$confirm('确认关闭', '提示框').then(() => {
-        done()
-      }).catch(() => {
-
+      this.$refs['userDialog'].form = JSON.parse(JSON.stringify(defaultFormData))
+      this.$refs['userDialog'].isEdit = false
+      this.$refs['userDialog'].dialog = true
+      this.$nextTick(() => {
+        this.$refs['userDialog'].$refs['form'].clearValidate()
       })
     },
     handleEdit(row) {
-      this.addForm = row
-      this.addDialog = true
+      this.$refs['userDialog'].form = Object.assign({}, {
+        userName: row.userName,
+        password: row.password,
+        roleId: row.roleId
+      })
+      this.$refs['userDialog'].isEdit = true
+      this.$refs['userDialog'].dialog = true
+    },
+    handleDelete(row) {
+      this.$confirm(this.$t('global.confirm.content'), this.$t('global.tip'), {
+        confirmButtonText: this.$t('global.button.sure'),
+        cancelButtonText: this.$t('global.button.cancel'),
+        type: 'warning'
+      }).then(() => {
+        const roleId = row.userId
+        delRole(roleId).then(res => {
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: this.$t('global.message.delSuccess')
+            })
+            this.fetchUserList()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: this.$t('global.message.cancel')
+        })
+      })
     },
     initSelect() {
       getRoleList().then(res => {
-        console.log(res.data)
         this.roleSelect = res.data
       })
     }

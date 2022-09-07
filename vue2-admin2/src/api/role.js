@@ -11,6 +11,13 @@ export function getRoleList(query) {
   })
 }
 
+export function getRoleSelect() {
+  return request({
+    url: `${prefix}/system/role/optionselect`,
+    method: 'get'
+  })
+}
+
 // 新增角色
 export function addRole(query) {
   return request({

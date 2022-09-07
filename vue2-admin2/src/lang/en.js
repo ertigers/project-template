@@ -1,4 +1,15 @@
 export default {
+  paramsList: {
+    genderType: {
+      unKnown: 'unKnown',
+      male: 'male',
+      female: 'female'
+    },
+    roleType: {
+      systemRole: 'systemRole',
+      customRole: 'customRole'
+    }
+  },
   route: {
     dashboard: 'Dashboard',
     systemSettings: 'SystemSettings',
@@ -21,8 +32,7 @@ export default {
   systemSettings: {
     userManage: {
       tools: {
-        placeholderName: 'name',
-        btnSearch: 'search'
+        placeholderName: 'name'
       },
       tableData: {
         tableCols: {

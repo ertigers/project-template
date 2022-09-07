@@ -60,12 +60,12 @@ export default {
     }
   },
   watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
+    // $route: {
+    //   handler: function(route) {
+    //     this.redirect = route.query && route.query.redirect
+    //   },
+    //   immediate: true
+    // }
   },
   methods: {
     showPwd() {
@@ -87,7 +87,8 @@ export default {
             password: this.loginForm.password
           }
           this.$store.dispatch('user/login', query).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            // this.$router.push({ path: this.redirect || '/' })
+            this.$router.push({ path: '/' })
             this.loading = false
           })
             .catch((err) => {

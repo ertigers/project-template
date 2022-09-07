@@ -8,22 +8,9 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
 
-// If your port is set to 80,
-// use administrator privileges to execute the command line.
-// For example, Mac: sudo npm run
-// You can change the port by the following methods:
-// port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 8080 // dev port
 
-// All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  /**
-   * You will need to set publicPath if you plan to deploy your site under a sub path,
-   * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
-   * then publicPath should be set to "/bar/".
-   * In most cases please use '/' !!!
-   * Detail: https://cli.vuejs.org/config/#publicpath
-   */
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -37,7 +24,7 @@ module.exports = {
     // 以上的ip和端口是我们本机的;下面为需要跨域的
     proxy: { // 配置跨域
       '/dev-api': {
-        target: 'http://172.22.93.1:9911', // 这里后台的地址模拟的;应该填写你们真实的后台接口
+        target: 'http://127.0.0.1:9911', // 这里后台的地址模拟的;应该填写你们真实的后台接口
         ws: true,
         changOrigin: true, // 允许跨域
         pathRewrite: {
