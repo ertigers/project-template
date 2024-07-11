@@ -1,0 +1,15 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Mask group">
+<mask id="mask0_20_73" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40">
+<rect id="Rectangle 14" width="40" height="40" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_20_73)">
+<path id="Vector" d="M16.8888 24.3529V20.6565C14.1419 19.4746 12.2222 16.7765 12.2222 13.6471C12.2222 9.42373 15.7131 6 20 6C24.2955 6 27.7778 9.43247 27.7778 13.6471C27.7778 16.7815 25.8549 19.4754 23.1111 20.6562V24.3529H30.1067C32.2568 24.3529 34 26.0502 34 28.1766V32H6V28.1764C6 26.0648 7.75153 24.3529 9.89327 24.3529H16.8888Z" fill="#2595E8"/>
+<g id="Group 8">
+<ellipse id="Ellipse 9" cx="16.5325" cy="16.0272" rx="16.7564" ry="24.6936" transform="rotate(47.5798 16.5325 16.0272)" fill="white" fill-opacity="0.1"/>
+<ellipse id="Ellipse 8" cx="11.9822" cy="11.6727" rx="14.1372" ry="20.3731" transform="rotate(40.5089 11.9822 11.6727)" fill="white" fill-opacity="0.2"/>
+<ellipse id="Ellipse 7" cx="13.2028" cy="9.18572" rx="6.92627" ry="8.9052" transform="rotate(45.3475 13.2028 9.18572)" fill="white" fill-opacity="0.25"/>
+</g>
+</g>
+</g>
+</svg>
